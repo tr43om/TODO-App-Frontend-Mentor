@@ -1,0 +1,417 @@
+/*-------------------*/
+/* IMPORTS */
+/*-------------------*/
+// Styles reset
+@import "../node_modules/modern-normalize/modern-normalize.css";
+// Breakpoints library
+@import "../node_modules/include-media/dist/include-media";
+// Josefin sans FONT
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap");
+
+/*-------------------*/
+/* CUSTOM VALUES */
+/*-------------------*/
+:root {
+  /* Colors */
+  // Light Theme palette
+  --c-todo: hsl(0, 0%, 100%);
+  --c-background: hsl(236, 33%, 92%);
+  --c-borders: hsl(235, 32%, 92%);
+  --с-placeholder: hsl(236, 9%, 61%);
+  --c-linethrough: hsl(233, 11%, 84%);
+  --c-btn: hsl(236, 9%, 61%);
+  --c-btn-remove: hsl(236, 9%, 61%);
+  --c-btn-hover: hsl(235, 19%, 35%);
+  --c-btn-active: hsla(220, 98%, 61%, 1);
+  --c-text: hsl(235, 19%, 35%);
+  --c-hint: hsl(235, 9%, 61%);
+  --c-shadow: rgba(194, 195, 214, 0.5);
+  --с-attribution: hsla(220, 98%, 61%, 1);
+}
+
+// Custom breakpoints
+$breakpoints: (
+  tablet: 50em,
+  desktop: 64em,
+);
+
+/*-------------------*/
+/* UTILITY CLASSES */
+/*-------------------*/
+.container {
+  padding-inline: 2em;
+  margin-inline: auto;
+  width: 100%;
+  max-width: 40rem;
+  position: relative;
+}
+
+.flex {
+  display: flex;
+}
+
+/*-------------------*/
+/* Padding and margin reset */
+/*-------------------*/
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+}
+
+/*-------------------*/
+/* MIXINS */
+/*-------------------*/
+@mixin centerer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+body {
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 0.75rem;
+
+  @include media(">tablet") {
+    font-size: 1.125rem;
+  }
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  color: var(--c-text);
+  min-height: 100vh;
+  background-color: var(--c-background);
+  transition: background-color 0.4s ease;
+}
+
+.header {
+  padding-top: 3rem;
+  min-height: 12.5rem;
+  background-image: url("../images/bg-mobile-light.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: background-image 0.4s ease;
+  position: relative;
+
+  @include media(">tablet") {
+    min-height: 18.75rem;
+    padding-top: 4.375rem;
+    background-image: url("../images/bg-desktop-light.jpg");
+  }
+}
+.logo {
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 1.6rem;
+  font-weight: normal;
+  letter-spacing: 8px;
+
+  @include media(">tablet") {
+    letter-spacing: 15px;
+    font-size: 2.5rem;
+  }
+}
+.icons {
+  margin-left: auto;
+}
+.icon {
+  position: absolute;
+  right: 2rem;
+  opacity: 0.7;
+  cursor: pointer;
+  transition: opacity 0.4s;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+.icon--sun {
+  opacity: 0;
+}
+.icon--moon {
+  opacity: 1;
+}
+.todo {
+  position: relative;
+  transform: translateY(-6rem);
+
+  @include media(">tablet") {
+    transform: translateY(-8rem);
+  }
+
+  // .todo__input
+
+  &__input,
+  &__input:focus,
+  &__input:active {
+    outline: none;
+    border: none;
+    width: 100%;
+    border-radius: 5px;
+    margin-bottom: 1.5rem;
+    color: var(--c-text);
+    background-color: var(--c-todo);
+    padding: 1.25rem;
+  }
+
+  // .todo__list
+
+  &__list {
+    overflow: hidden;
+    list-style: none;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 0px 35px 50px -15px var(--c-shadow);
+    position: relative;
+    transition: all 1s;
+    z-index: -1;
+
+    & > *:not(:first-child) {
+      border-top: 1px solid var(--c-borders);
+    }
+  }
+
+  // .todo__item,
+  // .todo__controls,
+  // .todo__filters
+
+  &__item,
+  &__controls,
+  &__filters {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    line-height: 12px;
+    background-color: var(--c-todo);
+
+    @include media(">tablet") {
+      padding: 1.25rem;
+    }
+  }
+
+  // .todo__item
+  &__item {
+    padding: 0;
+    transition: transform 1s;
+
+    &:hover > .todo__delete {
+      opacity: 1;
+    }
+
+    // Hover state for input, BUT NOT in a checked state
+    &:hover .todo__checkbox:not(.todo__checkbox:checked) {
+      border-color: transparent;
+      background: linear-gradient(135deg, #55ddff 0%, #c058f3 100%) border-box;
+      -webkit-mask: /*4*/ linear-gradient(#fff 0 0) padding-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out; /*5'*/
+      mask-composite: exclude;
+      mask-repeat: no-repeat;
+    }
+
+    &--done {
+      text-decoration: line-through;
+      color: var(--c-linethrough);
+    }
+  }
+
+  // .todo__label
+
+  &__label {
+    padding: 1.25rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  // .todo > input[type="checkbox"]
+  input[type="checkbox"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 1.25rem;
+    aspect-ratio: 1;
+    border: 1px solid var(--c-borders);
+    border-radius: 50%;
+
+    // Functionality of checkboxes
+    &:checked {
+      border: none;
+      background-image: url("../images/icon-check.svg"),
+        linear-gradient(135deg, #55ddff 0%, #c058f3 100%);
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    @include media(">tablet") {
+      width: 1.5rem;
+    }
+  }
+
+  // .todo__delete
+  &__delete,
+  &__delete:focus {
+    all: unset;
+    height: 12px;
+    width: 12px;
+    background-color: var(--c-btn-remove);
+    -webkit-mask-size: cover;
+    mask-size: cover;
+    -webkit-mask-image: url("../images/icon-cross.svg");
+    mask-image: url("../images/icon-cross.svg");
+    cursor: pointer;
+    margin-right: 1.3rem;
+
+    @include media(">tablet") {
+      opacity: 0;
+    }
+
+    &:hover {
+      background-color: var(--c-btn-hover);
+    }
+  }
+
+  &__wrapper {
+    transition: transform 1s ease;
+  }
+
+  // .todo__controls,
+  // .todo__filters
+
+  &__controls,
+  &__filters {
+    color: var(--c-btn);
+    font-size: 0.875rem;
+    border-radius: 5px;
+
+    @include media(">tablet") {
+      border-radius: 0 0 5px 5px;
+    }
+  }
+
+  // .todo__filters
+
+  &__filters {
+    display: flex;
+    justify-content: center;
+    gap: 1.1rem;
+    margin-top: 1rem;
+    border-radius: 5px;
+
+    @include media(">tablet") {
+      @include centerer;
+
+      bottom: 0;
+      width: fit-content;
+      background-color: transparent;
+    }
+  }
+
+  // .todo__total
+
+  &__total {
+    margin-right: auto;
+  }
+
+  // .todo__hint
+
+  &__hint {
+    @include centerer;
+
+    color: hsl(235, 16%, 43%);
+    bottom: -4rem;
+  }
+}
+
+// Styles for buttons
+.btn {
+  all: unset;
+  color: var(--c-btn);
+  font-weight: 700;
+  transition: color 0.4s;
+  cursor: pointer;
+
+  &:not(.btn--accent):hover {
+    color: var(--c-btn-hover);
+  }
+
+  // .btn--accent
+  &--accent {
+    color: var(--c-btn-active);
+  }
+
+  // .btn--all
+  &--all {
+  }
+
+  // .btn--completed
+  &--completed {
+  }
+
+  // .btn--clear
+  &--clear {
+    margin-left: auto;
+    font-weight: 400;
+  }
+}
+
+// Styles for attribution
+.attribution {
+  margin-top: auto;
+  text-align: center;
+  font-size: 0.7rem;
+  background-color: var(--c-background);
+  padding-bottom: 2rem;
+  color: var(--c-text);
+  transition: background-color 0.4s ease;
+  @include media(">tablet") {
+    font-size: 0.9rem;
+  }
+
+  & > a {
+    opacity: 0.5;
+    transition: opacity 0.4s ease;
+    text-decoration: none;
+    color: var(--с-attribution);
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+/*-------------------*/
+/*     DARK THEME    */
+/*-------------------*/
+
+.app.dark {
+  --c-todo: hsl(235, 25%, 19%);
+  --c-text: hsl(235, 39%, 85%);
+  --c-background: hsl(235, 21%, 11%);
+  --c-borders: hsla(235, 14%, 26%, 1);
+  --с-placeholder: hsl(234, 11%, 52%);
+  --c-strikethrough: hsl(233, 14%, 35%);
+  --c-btn: hsl(236, 16%, 42%);
+  --c-btn-hover: hsl(236, 33%, 92%);
+
+  --c-hint: hsl(235, 16%, 43%);
+  --c-shadow: rgba(0, 0, 0, 0.5);
+
+  .icon--sun {
+    opacity: 1;
+  }
+  .icon--moon {
+    opacity: 0;
+  }
+
+  .header {
+    background-image: url("../images/bg-mobile-dark.jpg");
+
+    @include media(">tablet") {
+      background-image: url("../images/bg-desktop-dark.jpg");
+    }
+  }
+}
