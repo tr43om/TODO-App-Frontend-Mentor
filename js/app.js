@@ -40,7 +40,7 @@ class UI {
         <input type="checkbox" class="todo__checkbox" id="todo" ${
           todo.isdone ? "checked" : ""
         }/>
-        <p>${todo.task}</p>
+        <p class="todo__text">${todo.task}</p>
      </label>
         <button class="todo__delete"></button>
     </li>`;
@@ -226,17 +226,18 @@ document.querySelector(".todo__list").addEventListener("click", (e) => {
   // prettier-ignore
   if (document.querySelector(".btn--completed").classList.contains("btn--accent")) UI.showCompleted();
 
-  const label = e.target;
-  const todo = label.parentElement;
+  const clicked = e.target;
+  const todo = clicked.closest("li");
 
-  // Guard close: e.target can be only label
-  if (!label.classList.contains("todo__label")) return;
+  // Guard close: e.target can be only clicked
+  if (!clicked.classList.contains("todo__checkbox")) return;
 
+  console.log(clicked);
   // Add class for UI
   todo.classList.toggle("todo__item--done");
 
   // id of a target element
-  const todoNum = label.parentElement.dataset.todo;
+  const todoNum = clicked.parentElement.dataset.todo;
   // All todos from local storage
   const todos = Store.getTodos();
 

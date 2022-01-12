@@ -138,7 +138,7 @@ body {
       border-top: 1px solid var(--c-borders); }
   .todo__item, .todo__controls, .todo__filters {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     padding: 1rem 1.25rem;
     line-height: 12px;
     background-color: var(--c-todo); }
@@ -161,6 +161,8 @@ body {
     .todo__item--done {
       text-decoration: line-through;
       color: var(--c-linethrough); }
+    .todo__item p {
+      line-height: 1.2rem; }
   .todo__label {
     padding: 1.25rem;
     display: flex;
@@ -169,9 +171,12 @@ body {
     width: 100%;
     cursor: pointer; }
   .todo input[type="checkbox"] {
+    display: flex;
+    align-self: flex-start;
     -webkit-appearance: none;
     appearance: none;
     width: 1.25rem;
+    height: 1.25rem;
     aspect-ratio: 1;
     border: 1px solid var(--c-borders);
     border-radius: 50%; }
@@ -182,6 +187,7 @@ body {
       background-position: center; }
     @media (min-width: 50.01em) {
       .todo input[type="checkbox"] {
+        height: 1.5rem;
         width: 1.5rem; } }
   .todo__delete, .todo__delete:focus {
     all: unset;
@@ -193,7 +199,9 @@ body {
     -webkit-mask-image: url("../images/icon-cross.svg");
     mask-image: url("../images/icon-cross.svg");
     cursor: pointer;
-    margin-right: 1.3rem; }
+    margin-bottom: 1.3rem;
+    margin-right: 1.3rem;
+    margin-top: 1.3rem; }
     @media (min-width: 50.01em) {
       .todo__delete, .todo__delete:focus {
         opacity: 0; } }
