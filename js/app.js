@@ -237,7 +237,7 @@ document.querySelector(".todo__list").addEventListener("click", (e) => {
   todo.classList.toggle("todo__item--done");
 
   // id of a target element
-  const todoNum = clicked.parentElement.dataset.todo;
+  const todoNum = todo.dataset.todo;
   // All todos from local storage
   const todos = Store.getTodos();
 
