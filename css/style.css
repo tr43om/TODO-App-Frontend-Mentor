@@ -50,7 +50,8 @@
 /*-------------------*/
 body {
   font-family: "Josefin Sans", sans-serif;
-  font-size: 0.75rem; }
+  font-size: 0.75rem;
+  box-sizing: border-box; }
   @media (min-width: 50.01em) {
     body {
       font-size: 1.125rem; } }
