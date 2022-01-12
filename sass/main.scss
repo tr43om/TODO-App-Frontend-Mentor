@@ -202,6 +202,10 @@ body {
     padding: 0;
     transition: transform 1s;
 
+    &--draggable.dragging {
+      opacity: 0.5;
+    }
+
     &:hover > .todo__delete {
       opacity: 1;
     }
@@ -235,12 +239,13 @@ body {
     gap: 1rem;
     align-items: center;
     width: 100%;
-    cursor: pointer;
+    cursor: grab;
   }
 
   // .todo > input[type="checkbox"]
   input[type="checkbox"] {
     display: flex;
+    cursor: pointer;
     align-self: flex-start;
     -webkit-appearance: none;
     appearance: none;

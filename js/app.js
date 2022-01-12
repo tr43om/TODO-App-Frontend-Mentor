@@ -1,4 +1,5 @@
 "use strict";
+const list = document.querySelector(".todo__list");
 let todosCount = 0;
 
 /* --------- CLASSES --------- */
@@ -32,10 +33,8 @@ class UI {
   }
 
   static addTodoToList(todo) {
-    const list = document.querySelector(".todo__list");
-
     // prettier-ignore
-    const html = `<li class="todo__item ${todo.isdone ? "todo__item--done" : "" }" data-todo="${todo.num}">
+    const html = `<li draggable="true" class="todo__item todo__item--draggable ${todo.isdone ? "todo__item--done" : "" }" data-todo="${todo.num}">
      <label class="todo__label ">
         <input type="checkbox" class="todo__checkbox" id="todo" ${
           todo.isdone ? "checked" : ""
@@ -128,6 +127,33 @@ class UI {
       document.querySelector(`[data-todo="${todo.num}"]`).remove();
       Store.removeTodo(todo.num);
     });
+  }
+
+  static drag(todo) {
+    todo.classList.add("dragging");
+  }
+
+  static drop(todo) {
+    todo.classList.remove("dragging");
+  }
+
+  static getDragAfterElement(container, y) {
+    const draggableElements = [
+      ...container.querySelectorAll(".todo__item--draggable:not(.dragging)"),
+    ];
+
+    return draggableElements.reduce(
+      (closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        } else {
+          return closest;
+        }
+      },
+      { offset: Number.NEGATIVE_INFINITY }
+    ).element;
   }
 
   // Clear input field
@@ -279,3 +305,30 @@ document.querySelector(".btn--clear").addEventListener("click", () => {
 document
   .querySelectorAll("#theme-switch")
   .forEach((btn) => btn.addEventListener("click", UI.switchTheme));
+
+// Event: Drag start
+list.addEventListener("dragstart", function (e) {
+  const draggable = e.target;
+  if (!draggable.classList.contains("todo__item")) return;
+  UI.drag(draggable);
+});
+
+// Event: Drag end
+list.addEventListener("dragend", function (e) {
+  const draggable = e.target;
+  if (!draggable.classList.contains("todo__item")) return;
+  UI.drop(draggable);
+});
+
+// Event: Drag over
+list.addEventListener("dragover", function (e) {
+  e.preventDefault();
+  const afterElement = UI.getDragAfterElement(list, e.clientY);
+  const draggable = document.querySelector(".dragging");
+
+  if (afterElement == null) {
+    list.appendChild(draggable);
+  } else {
+    list.insertBefore(draggable, afterElement);
+  }
+});
